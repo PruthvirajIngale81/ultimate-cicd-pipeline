@@ -1,18 +1,80 @@
-# Todo App + WAF + IDS on k3s (Dev Lab)
+# Secure Kubernetes Todo Application  
+## CI/CD + Monitoring (K3s Based Implementation)
 
-## Prereqs
-- k3s installed and running
-- kubectl configured to connect to k3s
-- Docker (or build image and load into k3s)
+---
 
-## Quick steps
+## 📌 Project Overview
 
-1. Build docker image locally and load into k3s (local workflow)
-   ```bash
-   # Build image
-   docker build -t todo-app:latest -f docker/Dockerfile .
+This project implements a **secure, production-style Kubernetes deployment** of a Todo application using **K3s**.  
+It integrates **CI/CD**, and **monitoring**.
 
-   # For k3s, load image into k3s containerd:
-   # If k3s installed as single-node, you can use "ctr" inside k3s:
-   k3s ctr image import $(docker save todo-app:latest -o todo-app.tar && echo todo-app.tar)
-   # Simpler approach: push to your registry and change image in k8s/todo-deployment.yaml
+
+---
+
+## 🧱 System Architecture Overview
+
+### Core Components
+- **CI/CD Pipeline**: Jenkins, SonarQube, Trivy
+- **Application Stack**: Flask Todo App + MySQL
+- **Monitoring**: Prometheus + Grafana
+- **Platform**: K3s Kubernetes Cluster
+
+---
+
+## 🔁 CI/CD Pipeline Architecture
+
+### Tools Used
+- **Jenkins** – Continuous Integration
+- **SonarQube** – Static code analysis
+- **Docker** – Image build
+- **Trivy** – Container vulnerability scanning
+
+### Workflow
+1. Source code pushed to GitHub
+2. Jenkins pipeline triggered
+3. SonarQube scans code quality
+4. Docker image is built
+5. Trivy scans image for CVEs
+6. Secure image is deployed to Kubernetes
+
+---
+
+## ☸️ Kubernetes Cluster Design
+
+### Namespace: `todo`
+
+All application and security workloads run inside the `todo` namespace (except monitoring).
+
+---
+
+## 🧩 Application Components
+
+### Todo Application
+- Flask-based web application
+- Deployed with multiple replicas
+- Uses:
+  - **Secrets** for database credentials
+  - **ConfigMaps** for database initialization
+- Exposed using **NodePort service**
+
+### MySQL Database
+- MySQL 8.0 deployment
+- Persistent storage using PVC
+- Initialization SQL loaded via ConfigMap
+- Internal ClusterIP service
+
+---
+
+## 🔐 Secrets & Configuration Management
+
+### Kubernetes Secrets
+- Database credentials
+- Application secret key
+
+### ConfigMaps
+- MySQL database initialization scripts
+- Application configuration (if required)
+
+---
+
+
