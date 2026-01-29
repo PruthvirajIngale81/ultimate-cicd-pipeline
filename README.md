@@ -1,3 +1,7 @@
+![Screenshot] (/Users/pruthvi/Downloads/Sunbeam_Infotec/DevSecOps/ultimate_final.png) 
+
+
+
 # Todo Application – Kubernetes CI/CD Architecture
 
 ## 📌 Project Overview
